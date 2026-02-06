@@ -11,8 +11,12 @@ async fn main() {
     // Build our application with a single route
     let app = Router::new().route("/", get(serve_index));
 
-    // Define the address to listen on (0.0.0.0:8080)
-    let addr = SocketAddr::from(([0, 0, 0, 0], 8080));
+    // Get the port from the environment variable, defaulting to 8000
+    let port = std::env::var("PORT")
+        .ok()
+        .and_then(|p| p.parse().ok())
+        .unwrap_or(8000);
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     println!("Listening on {}", addr);
 
     // Run the server

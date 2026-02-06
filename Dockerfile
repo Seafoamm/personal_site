@@ -31,8 +31,8 @@ COPY --from=builder /app/target/release/personal_site .
 # Copy the index.html file so the server can find it
 COPY index.html .
 
-# Expose port 8080 (must match the port in main.rs)
-EXPOSE 8080
+# Expose port 8000 (must match the default in main.rs or the environment)
+EXPOSE 8000
 
 # Command to run the application
 CMD ["./personal_site"]
