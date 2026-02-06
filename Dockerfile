@@ -9,8 +9,8 @@ COPY Cargo.toml Cargo.lock ./
 
 # Create a dummy main file to build dependencies first (caching optimization)
 # This prevents re-downloading dependencies every time you change source code.
-RUN mkdir src && 
-    echo "fn main() {println!("if you see this, the build broke")}" > src/main.rs && 
+RUN mkdir src && \
+    echo 'fn main() {println!("if you see this, the build broke")}' > src/main.rs && \
     cargo build --release
 
 # Now copy the actual source code
