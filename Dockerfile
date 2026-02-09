@@ -30,6 +30,7 @@ COPY --from=builder /app/target/release/personal_site .
 
 # Copy the index.html file so the server can find it
 COPY index.html .
+COPY output.css .
 
 # Expose port 8000 (must match the default in main.rs or the environment)
 EXPOSE 8000
