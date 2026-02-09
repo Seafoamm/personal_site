@@ -5,12 +5,17 @@ use axum::{
 };
 use std::net::SocketAddr;
 use tokio::fs;
+use tower_http::services::ServeDir;
+use constcat::concat;
+
+const ASSETS_PATH: &str = "assets/";
+const INDEX_PATH: &str = concat!(ASSETS_PATH, "index.html");
 
 #[tokio::main]
 async fn main() {
-    // Build our application with a single route
-    let app = Router::new().route("/", get(serve_index));
-
+    let app = Router::new()
+        .route("/", get(serve_index))
+        .fallback_service(ServeDir::new("assets"));
     // Get the port from the environment variable, defaulting to 8000
     let port = std::env::var("PORT")
         .ok()
@@ -27,7 +32,7 @@ async fn main() {
 // Handler to serve the index.html file
 async fn serve_index() -> Html<String> {
     // Read the index.html file from the current directory
-    match fs::read_to_string("index.html").await {
+    match fs::read_to_string(INDEX_PATH).await {
         Ok(content) => Html(content),
         Err(_) => Html("<h1>Error: index.html not found</h1>".to_string()),
     }

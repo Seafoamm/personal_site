@@ -5,5 +5,7 @@ edition = "2024"
 
 [dependencies]
 axum = "0.8.8"
+constcat = "0.6.1"
 leptos = { version = "0.8.15", features = ["csr"] }
 tokio = { version = "1.49.0", features = ["full"] }
+tower-http = { version = "0.6.2", features = ["fs"] }
