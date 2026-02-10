@@ -1,14 +1,12 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
+@source "./assets/index.html";
+
 @theme {
-  /* Seafoam Primary */
-  --color-primary: #71C9CE;
-  --color-primary-dark: #0E8388;
-  --color-primary-light: #A7FFEB;
-
-  /* Lilac Accent */
-  --color-accent: #D8B4FE;
-
-  /* UX Neutrals */
-  --color-surface: #F6F9F9;
-  --color-charcoal: #2D3436;
+  --color-primary: #92E3E8;
+  --color-primary-dark: #71C9CE;
+  --color-accent: #E9D5FF;
+  --color-main: #0F172A;
+  --color-surface: #1E293B;
+  --color-frost: #F8FAFC;
+  --color-silver: #94A3B8;
 }

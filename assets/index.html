@@ -4,22 +4,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./output.css" rel="stylesheet">
+  <link href="/output.css" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="./favicon.png">
 </head>
+<header class="border border-surface shadow-sm p-2">
+  <a href=".">
+    <h1 class="text-primary text-2xl flex justify-center">Lu::Brandon</h1>
+  </a>
+</header>
+<nav class="border border-surface shadow-sm p-2 justify-evenly flex-col flex gap-2">
+  <ul class="justify-evenly flex gap-2 width-full">
+    <a href="." class="text-accent">About</a>
+    <a href="/system_design" class="text-accent">System Design</a>
+    <a href="/algorithms" class="text-accent">Algorithms</a>
+  </ul>
+  <hr />
+  <ul class="[&_img]:border [&_img]:border-surface [&_img]:p-2 [&_img]:size-12 flex flex-row gap-2 justify-center">
+    <a href="https://www.youtube.com/@DoubleColon11"><img src="./yt_icon.png" /></a>
+    <a href="https://linktr.ee/doublecolon11"><img src="./linktree_icon.webp" /></a>
+  </ul>
+</nav>
 
-<body>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-  <button
-    class="bg-primary text-charcoal font-semibold py-2 px-4 rounded-lg hover:bg-primary-dark hover:text-white transition-colors">
-    Get Started
-  </button>
-  <div class="bg-white border border-surface shadow-sm p-6 rounded-xl">
-    <span class="text-accent font-bold uppercase tracking-wide text-xs">Pro Tip</span>
-    <h2 class="text-charcoal text-xl mt-2">Design System</h2>
-  </div>
+<body class="bg-main text-frost">
+  1. Intro
+  2. Resume
+  3. Projects Showcase
 </body>
 
 </html>

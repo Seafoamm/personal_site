@@ -1,12 +1,9 @@
-use axum::{
-    response::Html,
-    routing::get,
-    Router,
-};
+use axum::{Router, response::Html, routing::get};
+use constcat::concat;
 use std::net::SocketAddr;
 use tokio::fs;
 use tower_http::services::ServeDir;
-use constcat::concat;
+use tower_livereload::LiveReloadLayer;
 
 const ASSETS_PATH: &str = "assets/";
 const INDEX_PATH: &str = concat!(ASSETS_PATH, "index.html");
@@ -15,7 +12,12 @@ const INDEX_PATH: &str = concat!(ASSETS_PATH, "index.html");
 async fn main() {
     let app = Router::new()
         .route("/", get(serve_index))
-        .fallback_service(ServeDir::new("assets"));
+        .route("/system_design", get(serve_index))
+        .route("/algorithms", get(serve_index))
+        .fallback_service(ServeDir::new("assets"))
+        // Add this layer last so it wraps all routes
+        .layer(LiveReloadLayer::new());
+
     // Get the port from the environment variable, defaulting to 8000
     let port = std::env::var("PORT")
         .ok()
