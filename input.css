@@ -1,6 +1,13 @@
 @import "tailwindcss" source(none);
 @source "./assets/index.html";
 
+@font-face {
+  font-family: 'JetBrainsMono';
+  src: url('/assets/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @theme {
   --color-primary: #92E3E8;
   --color-primary-dark: #71C9CE;
@@ -9,4 +16,5 @@
   --color-surface: #1E293B;
   --color-frost: #F8FAFC;
   --color-silver: #94A3B8;
+  --font-primary: "JetBrainsMono", monospace;
 }

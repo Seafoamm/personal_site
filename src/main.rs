@@ -1,19 +1,16 @@
-use axum::{Router, response::Html, routing::get};
-use constcat::concat;
+use axum::{Router, routing::get};
 use std::net::SocketAddr;
-use tokio::fs;
 use tower_http::services::ServeDir;
 use tower_livereload::LiveReloadLayer;
 
-const ASSETS_PATH: &str = "assets/";
-const INDEX_PATH: &str = concat!(ASSETS_PATH, "index.html");
+mod templates;
+use templates::{tmpl_example_term_prompt, tmpl_index};
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route("/", get(serve_index))
-        .route("/system_design", get(serve_index))
-        .route("/algorithms", get(serve_index))
+        .route("/", get(tmpl_index))
+        .route("/system_design", get(tmpl_example_term_prompt))
         .fallback_service(ServeDir::new("assets"))
         // Add this layer last so it wraps all routes
         .layer(LiveReloadLayer::new());
@@ -29,13 +26,4 @@ async fn main() {
     // Run the server
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
-}
-
-// Handler to serve the index.html file
-async fn serve_index() -> Html<String> {
-    // Read the index.html file from the current directory
-    match fs::read_to_string(INDEX_PATH).await {
-        Ok(content) => Html(content),
-        Err(_) => Html("<h1>Error: index.html not found</h1>".to_string()),
-    }
 }

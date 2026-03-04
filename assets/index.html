@@ -6,13 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/output.css" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="./favicon.png">
+  <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
 </head>
-<header class="border border-surface shadow-sm p-2">
+<header
+  class="bg-surface border border-surface shadow-sm mb-4 font-primary text-primary flex-row flex justify-between">
+  <div class="ml-2 flex-1 text-left py-0">
+    <p class="text-xs">Placeholder for icons/CTA</p>
+  </div>
+    <div class="flex-1 flex-col py-2 text-center">
   <a href=".">
-    <h1 class="text-primary text-2xl flex justify-center">Lu::Brandon</h1>
+    <h1 class="py-4 text-primary text-4xl flex-1 justify-evenly bg-surface font-primary text-center">Lu::Brandon</h1>
   </a>
+<p>( Brandon Lu )</p>
+    </div>
+  <p class="text-xs mr-2 flex-1 text-right py-0">Terminal UI inspired resume/CV/portfolio/blog</p>
 </header>
-<nav class="border border-surface shadow-sm p-2 justify-evenly flex-col flex gap-2">
+<nav class="border border-surface shadow-sm flex-col flex gap-2 py-4 bg-surface">
   <ul class="justify-evenly flex gap-2 width-full">
     <a href="." class="text-accent">About</a>
     <a href="/system_design" class="text-accent">System Design</a>
