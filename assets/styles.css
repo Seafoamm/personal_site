@@ -1,0 +1,106 @@
+/* 1. Global Variables (Your Theme) */
+:root {
+  --primary: #92E3E8;
+  --accent: #E9D5FF;
+  --bg-main: #0F172A;
+  --bg-nav: #161F35;
+  --bg-surface: #1E293B;
+  --text-frost: #F8FAFC;
+  --text-silver: #94A3B8;
+  --font-mono: 'JetBrains Mono', monospace;
+  --space-s: 8px;
+  --space-xs: 4px;
+}
+
+*,
+::after,
+::before {
+  background-color: var(--bg-main);
+  color: var(--text-silver);
+  font-family: var(--font-mono);
+}
+
+hr {
+  margin: unset;
+  padding: unset;
+  margin-inline-start: unset;
+  margin-inline-end: unset;
+  margin-block-start: unset;
+  margin-block-end: unset;
+}
+
+.clear-spacing {
+  margin: unset;
+  padding: unset;
+}
+
+.term-window-title-chrome {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.term-window-title-chrome,
+.term-window-title-chrome * {
+  background-color: var(--bg-surface);
+}
+
+.term-window-title-left {
+  justify-self: start;
+}
+
+.term-window-title-socials {
+  display: flex;
+  flex-direction: row;
+}
+
+.term-window-title-left img {
+  height: 44px;
+}
+
+.term-window-title-center {
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.term-window-title-center * {
+  margin: var(--space-s);
+}
+
+.term-window-title-center a {
+  margin: 0;
+}
+
+.term-window-title-center p {
+  margin-top: 0;
+}
+
+.term-window-title-right {
+  justify-self: end;
+}
+
+.term-window-nav,
+.term-window-nav * {
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-xs);
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+}
+
+.term-window-nav a {
+  background-color: var(--bg-nav);
+  border-width: 1px;
+  border-style: solid;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.term-window-nav-tab-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
