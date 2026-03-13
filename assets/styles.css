@@ -5,11 +5,15 @@
   --bg-main: #0F172A;
   --bg-nav: #161F35;
   --bg-surface: #1E293B;
+  --bg-elevated: #2D3A4F;
+  --accent-glow: #384963;
   --text-frost: #F8FAFC;
   --text-silver: #94A3B8;
   --font-mono: 'JetBrains Mono', monospace;
   --space-s: 8px;
   --space-xs: 4px;
+  --border-rounded-radius: 24px;
+  --border-width: 1px;
 }
 
 *,
@@ -18,6 +22,16 @@
   background-color: var(--bg-main);
   color: var(--text-silver);
   font-family: var(--font-mono);
+}
+
+body {
+  border-radius: var(--border-rounded-radius);
+  border-style: solid;
+  border-width: var(--border-width);
+  overflow: hidden;
+  height: 99.5vh;
+  height: 99.5dvh;
+  margin: 1px !important;
 }
 
 hr {
@@ -37,11 +51,18 @@ hr {
 .term-window-title-chrome {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  border: solid;
+  border-width: var(--border-width);
+  border-radius: var(--border-rounded-radius);
 }
 
 .term-window-title-chrome,
 .term-window-title-chrome * {
   background-color: var(--bg-surface);
+  border: solid;
+  border-width: var(--border-width);
+  border-radius: var(--border-rounded-radius);
+  border-color: var(--bg-surface);
 }
 
 .term-window-title-left {
@@ -88,19 +109,70 @@ hr {
   margin-left: 0;
   margin-right: 0;
   padding: 0;
+  padding-left: 1px;
+  padding-right: 1px;
+  background-color: var(--bg-nav);
 }
 
 .term-window-nav a {
-  background-color: var(--bg-nav);
-  border-width: 1px;
+  border-width: var(--border-width);
   border-style: solid;
+  border-radius: var(--border-rounded-radius);
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.term-window-nav-active {
+  background-color: var(--bg-elevated);
 }
 
 .term-window-nav-tab-bar {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+}
+
+.terminal_prompt {
+  color: var(--text-frost);
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  width: 0;
+  animation: typing 1s steps(40, end) forwards;
+}
+
+/* The container for your prompt (e.g., the <p> or <div>) */
+.cursor-prompt::after {
+  content: "█";
+  /* Use █ for a block or | for a line */
+  margin-left: 0.2rem;
+  color: var(--primary);
+  /* Your Seafoam color */
+  animation:
+    blink 1s step-end 1s infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+/* The typing effect */
+@keyframes typing {
+  from {
+    width: 0
+  }
+
+  to {
+    width: 100%
+  }
 }

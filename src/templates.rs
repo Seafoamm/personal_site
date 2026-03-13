@@ -1,16 +1,38 @@
+use axum::http::Uri;
 use maud::{DOCTYPE, Markup, html};
 
-fn tmpl_term_prompt(content: &str) -> Markup {
+fn tmpl_terminal_line(content: &str) -> Markup {
     html! {
-        p { "$ " (content) }
+        span."terminal_prompt cursor-prompt" { "$ " (content) }
     }
 }
 
 pub(crate) async fn tmpl_example_term_prompt() -> Markup {
-    tmpl_term_prompt("Hello world!")
+    tmpl_terminal_line("Hello world!")
 }
 
-pub(crate) async fn tmpl_index() -> Markup {
+pub(crate) fn tmpl_nav_button(is_highlighted: bool, href: &str, label: &str) -> Markup {
+    let active_class: &str = if is_highlighted {
+        "term-window-nav-active"
+    } else {
+        ""
+    };
+
+    html! {
+        a.(active_class) href=(href) { (label) }
+    }
+}
+
+pub(crate) fn tmpl_global_chrome_wrapper(uri: Uri, body: Markup) -> Markup {
+    let path = uri.path();
+    let home_nav_button = tmpl_nav_button(matches!(path, "/about" | "" | "/"), "/about", "About");
+    let system_design_nav_button = tmpl_nav_button(
+        matches!(path, "/system_design"),
+        "/system_design",
+        "System Design",
+    );
+    let algorithms_nav_button =
+        tmpl_nav_button(matches!(path, "/algorithms"), "/algorithms", "Algorithms");
     html! {
         (DOCTYPE)
         html {
@@ -43,24 +65,38 @@ pub(crate) async fn tmpl_index() -> Markup {
                         }
                         p { "( Brandon Lu )" }
                     }
-                    p."term-window-title-right clear-spacing" {
-                        "Terminal UI inspired resume/CV/portfolio/blog"
-                    }
+                    p."term-window-title-right clear-spacing" { "Terminal UI inspired resume" }
                 }
-                hr;
                 nav."term-window-nav" {
                     ul."term-window-nav-tab-bar" {
-                        a href="." { "About" }
-                        a href="/system_design" { "System Design" }
-                        a href="/algorithms" { "Algorithms" }
+                        (home_nav_button)
+                        (system_design_nav_button)
+                        (algorithms_nav_button)
                     }
                 }
                 hr;
-
-                "1. Intro\n
-                2. Resume\n
-                3. Projects Showcase"
+                (body)
             }
         }
     }
+}
+pub(crate) async fn handler_index(uri: Uri) -> Markup {
+    let body = html! {
+        (tmpl_terminal_line("About..."))
+    };
+    tmpl_global_chrome_wrapper(uri, body)
+}
+
+pub(crate) async fn handler_system_design(uri: Uri) -> Markup {
+    let body = html! {
+        (tmpl_terminal_line("System Design..."))
+    };
+    tmpl_global_chrome_wrapper(uri, body)
+}
+
+pub(crate) async fn handler_algorithms(uri: Uri) -> Markup {
+    let body = html! {
+        (tmpl_terminal_line("Algorithms..."))
+    };
+    tmpl_global_chrome_wrapper(uri, body)
 }

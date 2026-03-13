@@ -4,13 +4,15 @@ use tower_http::services::ServeDir;
 use tower_livereload::LiveReloadLayer;
 
 mod templates;
-use templates::{tmpl_example_term_prompt, tmpl_index};
+use templates::{handler_algorithms, handler_index, handler_system_design};
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route("/", get(tmpl_index))
-        .route("/system_design", get(tmpl_example_term_prompt))
+        .route("/", get(handler_index))
+        .route("/about", get(handler_index))
+        .route("/system_design", get(handler_system_design))
+        .route("/algorithms", get(handler_algorithms))
         .fallback_service(ServeDir::new("assets"))
         // Add this layer last so it wraps all routes
         .layer(LiveReloadLayer::new());
