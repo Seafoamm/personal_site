@@ -28,7 +28,7 @@ body {
   border-radius: var(--border-rounded-radius);
   border-style: solid;
   border-width: var(--border-width);
-  overflow: hidden;
+  overflow: scroll;
   height: 99.5vh;
   height: 99.5dvh;
   margin: 1px !important;
@@ -126,6 +126,8 @@ hr {
   display: flex;
   justify-content: center;
   text-decoration: none;
+  padding-top: var(--space-xs);
+  padding-bottom: var(--space-xs);
 }
 
 .term-window-nav-active {
@@ -180,4 +182,9 @@ hr {
   to {
     width: 100%
   }
+}
+
+
+.terminal_lines {
+  list-style: none;
 }

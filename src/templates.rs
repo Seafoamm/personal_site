@@ -1,9 +1,14 @@
 use axum::http::Uri;
 use maud::{DOCTYPE, Markup, html};
+use std::fs::File;
+use std::io::{self, BufRead};
 
-fn tmpl_terminal_line(content: &str) -> Markup {
+const RESUME_FILEPATH: &str = "./assets/resume.md";
+
+fn tmpl_terminal_line(content: &str, is_last: bool) -> Markup {
+    let cursor_class = if is_last { "cursor-prompt" } else { "" };
     html! {
-        span."terminal_prompt cursor-prompt" { "$ " (content) }
+        span.terminal_prompt.(cursor_class) { "$ " (content) }
     }
 }
 
@@ -76,23 +81,53 @@ pub(crate) fn tmpl_global_chrome_wrapper(uri: Uri, body: Markup) -> Markup {
         }
     }
 }
+
+pub(crate) fn tmpl_page_body(lines: Vec<Markup>) -> Markup {
+    html! {
+        ul."terminal_lines" {
+            @for line in lines {
+                li { (line) }
+            }
+        }
+    }
+}
+
 pub(crate) async fn handler_index(uri: Uri) -> Markup {
-    let body = html! {
-        (tmpl_terminal_line("About..."))
-    };
+    let file = File::open(RESUME_FILEPATH).expect("Failed to read resume.md!");
+    let reader = io::BufReader::new(file);
+
+    // Collect all lines into a Vec first so we know the total count
+    let mut file_lines: Vec<String> = reader
+        .lines()
+        .map(|l| l.unwrap_or_else(|e| e.to_string()))
+        .collect();
+
+    // Insert your header at the start
+    file_lines.insert(0, "Printing resume...".to_string());
+
+    let mut body_lines: Vec<Markup> = Vec::new();
+    let total = file_lines.len();
+
+    for (i, line) in file_lines.iter().enumerate() {
+        // Only true if it's the very last element
+        let is_last = i == total - 1;
+        body_lines.push(tmpl_terminal_line(line, is_last));
+    }
+
+    let body = tmpl_page_body(body_lines);
     tmpl_global_chrome_wrapper(uri, body)
 }
 
 pub(crate) async fn handler_system_design(uri: Uri) -> Markup {
     let body = html! {
-        (tmpl_terminal_line("System Design..."))
+        (tmpl_terminal_line("System Design...", true))
     };
     tmpl_global_chrome_wrapper(uri, body)
 }
 
 pub(crate) async fn handler_algorithms(uri: Uri) -> Markup {
     let body = html! {
-        (tmpl_terminal_line("Algorithms..."))
+        (tmpl_terminal_line("Algorithms...", true))
     };
     tmpl_global_chrome_wrapper(uri, body)
 }
