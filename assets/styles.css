@@ -78,12 +78,14 @@ hr {
   height: 44px;
 }
 
-.term-window-title-center {
+.term-window-title-center,
+.term-window-title-center * {
   justify-self: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-decoration: none;
 }
 
 .term-window-title-center * {
@@ -100,6 +102,8 @@ hr {
 
 .term-window-title-right {
   justify-self: end;
+  padding-top: var(--space-xs);
+  padding-right: var(--space-xs);
 }
 
 .term-window-nav,
@@ -121,6 +125,7 @@ hr {
   width: 100%;
   display: flex;
   justify-content: center;
+  text-decoration: none;
 }
 
 .term-window-nav-active {

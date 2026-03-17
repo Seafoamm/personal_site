@@ -7,10 +7,6 @@ fn tmpl_terminal_line(content: &str) -> Markup {
     }
 }
 
-pub(crate) async fn tmpl_example_term_prompt() -> Markup {
-    tmpl_terminal_line("Hello world!")
-}
-
 pub(crate) fn tmpl_nav_button(is_highlighted: bool, href: &str, label: &str) -> Markup {
     let active_class: &str = if is_highlighted {
         "term-window-nav-active"
@@ -62,8 +58,8 @@ pub(crate) fn tmpl_global_chrome_wrapper(uri: Uri, body: Markup) -> Markup {
                     div."term-window-title-center" {
                         a href="." {
                             h1 { "Lu::Brandon" }
+                            p { "( Brandon Lu )" }
                         }
-                        p { "( Brandon Lu )" }
                     }
                     p."term-window-title-right clear-spacing" { "Terminal UI inspired resume" }
                 }
