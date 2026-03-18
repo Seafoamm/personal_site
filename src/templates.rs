@@ -1,5 +1,6 @@
 use axum::http::Uri;
-use maud::{DOCTYPE, Markup, Render, html};
+use maud::{DOCTYPE, Markup, html};
+use pulldown_cmark::{Event, HeadingLevel, Parser, Tag};
 use std::fs::File;
 use std::io::{self, BufRead};
 use typed_builder::TypedBuilder;
@@ -8,6 +9,7 @@ const RESUME_FILEPATH: &str = "./assets/resume.md";
 const TERMINAL_PROMPT: &str = "$ ";
 const TERMINAL_DEFAULT_FONT_WEIGHT: i32 = 400;
 const TERMINAL_DEFAULT_OPACITY: i32 = 1;
+const TERMINAL_OUTPUT_CSS_CLASS_PREFIX: &str = "md_";
 
 #[derive(TypedBuilder)]
 struct TerminalOutputOptions {
@@ -33,11 +35,71 @@ struct TerminalOutputOptions {
     is_last: bool,
 }
 
-fn tmpl_terminal_command<T: Render>(content: T, options: TerminalOutputOptions) -> Markup {
-    // TODO: implement terminal options
-    let cursor_class = if options.is_last { "cursor-prompt" } else { "" };
+impl TerminalOutputOptions {
+    pub fn get_terminal_output_option_css_classes(&self) -> String {
+        // Map field references to their intended CSS name
+        let flags = [
+            (self.is_italic, "italic"),
+            (self.is_bolded, "bolded"),
+            (self.is_banner, "banner"),
+            (self.is_command, "command"),
+            (self.is_pill, "pill"),
+            (self.is_uri, "uri"),
+            (self.is_list, "list"),
+            (self.is_last, "last"),
+        ];
+
+        let mut css_classes = flags
+            .iter()
+            .filter(|(is_active, _)| *is_active) // Only take true values
+            .map(|(_, name)| name.with_md_css_prefix()) // Apply your trait method
+            .collect::<Vec<_>>();
+
+        css_classes.push(format!("{}{}", "weight-".with_md_css_prefix(), self.weight));
+        css_classes.push(format!(
+            "{}{}",
+            "opacity-".with_md_css_prefix(),
+            self.weight
+        ));
+        css_classes.join(" ")
+    }
+}
+
+trait MarkdownCssPrefix {
+    fn with_md_css_prefix(&self) -> String;
+}
+
+impl MarkdownCssPrefix for str {
+    fn with_md_css_prefix(&self) -> String {
+        format!("{}{}", TERMINAL_OUTPUT_CSS_CLASS_PREFIX, self)
+    }
+}
+
+fn tmpl_terminal_command(content: &str, options: TerminalOutputOptions) -> Markup {
+    // TODO: implement css classes
+    let md_parser = Parser::new(content);
+    let mut css_classes: Vec<String> = Vec::new();
+    for event in md_parser {
+        match event {
+            Event::Start(Tag::Heading { level, .. }) => match level {
+                HeadingLevel::H1 => css_classes.push("h1".with_md_css_prefix()),
+                HeadingLevel::H2 => css_classes.push("h2".with_md_css_prefix()),
+                HeadingLevel::H3 => css_classes.push("h3".with_md_css_prefix()),
+                HeadingLevel::H4 => css_classes.push("h4".with_md_css_prefix()),
+                HeadingLevel::H5 => css_classes.push("h5".with_md_css_prefix()),
+                HeadingLevel::H6 => css_classes.push("h6".with_md_css_prefix()),
+            },
+            Event::Start(Tag::List(_)) => {
+                css_classes.push("list".with_md_css_prefix());
+            }
+            _ => (),
+        }
+    }
+
+    css_classes.push(options.get_terminal_output_option_css_classes());
+
     html! {
-        span.terminal_prompt.(cursor_class) { (TERMINAL_PROMPT) (content) }
+        span.terminal_prompt.(css_classes.join(" ")) { (TERMINAL_PROMPT) (content) }
     }
 }
 

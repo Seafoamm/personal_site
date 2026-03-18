@@ -151,7 +151,7 @@ hr {
 }
 
 /* The container for your prompt (e.g., the <p> or <div>) */
-.cursor-prompt::after {
+.md_last::after {
   content: "█";
   /* Use █ for a block or | for a line */
   margin-left: 0.2rem;
