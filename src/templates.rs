@@ -89,9 +89,13 @@ fn tmpl_terminal_command(content: &str, options: TerminalOutputOptions) -> Marku
                 HeadingLevel::H5 => css_classes.push("h5".with_md_css_prefix()),
                 HeadingLevel::H6 => css_classes.push("h6".with_md_css_prefix()),
             },
-            Event::Start(Tag::List(_)) => {
-                css_classes.push("list".with_md_css_prefix());
-            }
+            Event::Start(Tag::List(_)) => css_classes.push("list".with_md_css_prefix()),
+            Event::Start(Tag::Link {
+                link_type,
+                dest_url,
+                title,
+                id,
+            }) => css_classes.push("link".with_md_css_prefix()),
             _ => (),
         }
     }
