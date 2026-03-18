@@ -1,14 +1,43 @@
 use axum::http::Uri;
-use maud::{DOCTYPE, Markup, html};
+use maud::{DOCTYPE, Markup, Render, html};
 use std::fs::File;
 use std::io::{self, BufRead};
+use typed_builder::TypedBuilder;
 
 const RESUME_FILEPATH: &str = "./assets/resume.md";
+const TERMINAL_PROMPT: &str = "$ ";
+const TERMINAL_DEFAULT_FONT_WEIGHT: i32 = 400;
+const TERMINAL_DEFAULT_OPACITY: i32 = 1;
 
-fn tmpl_terminal_line(content: &str, is_last: bool) -> Markup {
-    let cursor_class = if is_last { "cursor-prompt" } else { "" };
+#[derive(TypedBuilder)]
+struct TerminalOutputOptions {
+    #[builder(default=TERMINAL_DEFAULT_FONT_WEIGHT)]
+    weight: i32,
+    #[builder(default=TERMINAL_DEFAULT_OPACITY)]
+    opacity: i32,
+    #[builder(default = false)]
+    is_italic: bool,
+    #[builder(default = false)]
+    is_bolded: bool,
+    #[builder(default = false)]
+    is_banner: bool,
+    #[builder(default = false)]
+    is_command: bool,
+    #[builder(default = false)]
+    is_pill: bool,
+    #[builder(default = false)]
+    is_uri: bool,
+    #[builder(default = false)]
+    is_list: bool,
+    #[builder(default = false)]
+    is_last: bool,
+}
+
+fn tmpl_terminal_command<T: Render>(content: T, options: TerminalOutputOptions) -> Markup {
+    // TODO: implement terminal options
+    let cursor_class = if options.is_last { "cursor-prompt" } else { "" };
     html! {
-        span.terminal_prompt.(cursor_class) { "$ " (content) }
+        span.terminal_prompt.(cursor_class) { (TERMINAL_PROMPT) (content) }
     }
 }
 
@@ -111,7 +140,10 @@ pub(crate) async fn handler_index(uri: Uri) -> Markup {
     for (i, line) in file_lines.iter().enumerate() {
         // Only true if it's the very last element
         let is_last = i == total - 1;
-        body_lines.push(tmpl_terminal_line(line, is_last));
+        body_lines.push(tmpl_terminal_command(
+            line,
+            TerminalOutputOptions::builder().is_last(is_last).build(),
+        ));
     }
 
     let body = tmpl_page_body(body_lines);
@@ -120,14 +152,23 @@ pub(crate) async fn handler_index(uri: Uri) -> Markup {
 
 pub(crate) async fn handler_system_design(uri: Uri) -> Markup {
     let body = html! {
-        (tmpl_terminal_line("System Design...", true))
+        ({
+            tmpl_terminal_command(
+                "System Design...",
+                TerminalOutputOptions::builder().is_last(true).build(),
+            )
+        })
     };
     tmpl_global_chrome_wrapper(uri, body)
 }
-
 pub(crate) async fn handler_algorithms(uri: Uri) -> Markup {
     let body = html! {
-        (tmpl_terminal_line("Algorithms...", true))
+        ({
+            tmpl_terminal_command(
+                "Algorithms...",
+                TerminalOutputOptions::builder().is_last(true).build(),
+            )
+        })
     };
     tmpl_global_chrome_wrapper(uri, body)
 }
